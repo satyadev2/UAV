@@ -1,37 +1,22 @@
 import random
-import math
-import matplotlib.pyplot as plt
-import time
-import random
 
-# User Class
 class User:
-    def __init__(self, position):
-        self.position = position  # position is a list [x, y]
-        self.connected_uav = None
+    def __init__(self, position, user_id):
+        self.position = position
+        self.id = user_id
 
-    def connect_to_uav(self, uav):
-        self.connected_uav = uav
-
-# Function to generate random user objects
 def generate_random_users(m, n, num_users):
+    """Generate random users with unique IDs on the grid."""
     users = []
-    for _ in range(num_users):
-        x = random.uniform(0, m)
-        y = random.uniform(0, n)
-        users.append(User([x, y]))  # Create User objects
+    for i in range(num_users):
+        position = (random.uniform(0, m), random.uniform(0, n))
+        user = User(position=position, user_id=f"U{i+1}")
+        users.append(user)
     return users
 
-
-# ue0.py (continued)
-
-# Function to simulate random walk for users
-def move_users(users, m, n, step_size=0.5):
+def move_users(users, m, n):
+    """Move users randomly within the grid bounds."""
     for user in users:
-        # Update x and y positions
-        user.position[0] += random.uniform(-step_size, step_size)
-        user.position[1] += random.uniform(-step_size, step_size)
-        
-        # Ensure users stay within grid boundaries
-        user.position[0] = max(0, min(user.position[0], m))
-        user.position[1] = max(0, min(user.position[1], n))
+        new_x = max(0, min(m, user.position[0] + random.uniform(-1, 1)))
+        new_y = max(0, min(n, user.position[1] + random.uniform(-1, 1)))
+        user.position = (new_x, new_y)
